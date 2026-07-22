@@ -12,11 +12,7 @@ class _TicketDialogState extends State<TicketDialog> {
 
   String? _selectedReason;
 
-  final List<String> _reasons = [
-    'Đi học trễ',
-    'Không logo',
-    'Không bảng tên',
-  ];
+  final List<String> _reasons = ['Đi học trễ', 'Không logo', 'Không bảng tên'];
 
   @override
   void dispose() {
@@ -32,15 +28,10 @@ class _TicketDialogState extends State<TicketDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           DropdownButtonFormField<String>(
-            value: _selectedReason,
-            decoration: const InputDecoration(
-              labelText: "Chọn lý do",
-            ),
+            initialValue: _selectedReason,
+            decoration: const InputDecoration(labelText: "Chọn lý do"),
             items: _reasons.map((reason) {
-              return DropdownMenuItem(
-                value: reason,
-                child: Text(reason),
-              );
+              return DropdownMenuItem(value: reason, child: Text(reason));
             }).toList(),
             onChanged: (value) {
               setState(() {
@@ -68,13 +59,10 @@ class _TicketDialogState extends State<TicketDialog> {
           onPressed: _selectedReason == null
               ? null
               : () {
-                  Navigator.pop(
-                    context,
-                    {
-                      "reason": _selectedReason!,
-                      "detail": _detailController.text.trim(),
-                    },
-                  );
+                  Navigator.pop(context, {
+                    "reason": _selectedReason!,
+                    "detail": _detailController.text.trim(),
+                  });
                 },
           child: const Text("Gửi"),
         ),

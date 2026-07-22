@@ -20,6 +20,8 @@ class _HomePageState extends State<HomePage> {
       builder: (_) => const TicketDialog(),
     );
 
+    if (!mounted) return;
+
     if (result != null) {
       setState(() {
         final now = DateTime.now();
