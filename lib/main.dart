@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,69 +8,82 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Im not IN',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Tuan Anh ga'),
+    return MaterialApp(debugShowCheckedModeBanner: false,
+
+    home: LoginPage()
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class LoginPage extends StatelessWidget {
+  LoginPage({super.key});
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      
-      _counter++;
-    });
-  }
-
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      appBar: AppBar(
-        
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        
-        title: Text(widget.title),
-      ),  
-      body: Center(
-        
+      // appBar: AppBar(title: const Text("Login")),
+
+      body: Padding(
+        padding: const EdgeInsets.all(50),
+
         child: Column(
-          
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
+
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            const Text(
+              "Xin chào",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 30),
+
+            TextField(
+              controller: usernameController,
+              decoration: const InputDecoration(
+                labelText: "Username",
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: "Password",
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (usernameController.text == "admin" &&
+                      passwordController.text == "123456") {
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Invalid username or password.")),
+                    );
+                  }
+                },
+                child: const Text("Login"),
+              ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
