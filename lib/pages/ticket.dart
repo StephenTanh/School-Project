@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'ticket_dialog.dart';
 import '../data/ticket_history.dart';
 
-
 class TicketPage extends StatefulWidget {
-  const TicketPage({Key? key}) : super(key: key);
+  final String username;
+
+  const TicketPage({Key? key, required this.username}) : super(key: key);
 
   @override
   State<TicketPage> createState() => _TicketPageState();
@@ -13,11 +14,7 @@ class TicketPage extends StatefulWidget {
 class _TicketPageState extends State<TicketPage> {
   final TextEditingController _detailController = TextEditingController();
   String? _selectedReason;
-  final List<String> _reasons = [
-    'Đi học trễ',
-    'Không logo',
-    'Không bảng tên',
-  ];
+  final List<String> _reasons = ['Đi học trễ', 'Không logo', 'Không bảng tên'];
 
   @override
   void dispose() {
@@ -25,44 +22,40 @@ class _TicketPageState extends State<TicketPage> {
     super.dispose();
   }
 
-Future<void> _showTicketDialog() async {
-  final result = await showDialog<Map<String, String>>(
-    context: context,
-    builder: (_) => const TicketDialog(),
-  );
-
-  if (result != null) {
-    setState(() {
-      final now = DateTime.now();
-
-      TicketHistory.tickets.insert(0, {
-        "username": "NguyenHaTuanAnh", // sau này lấy từ tài khoản đăng nhập
-        "reason": result["reason"]!,
-        "detail": result["detail"]!,
-        "date":
-            "${now.day.toString().padLeft(2, '0')}/"
-            "${now.month.toString().padLeft(2, '0')}/"
-            "${now.year}",
-        "time":
-            "${now.hour.toString().padLeft(2, '0')}:"
-            "${now.minute.toString().padLeft(2, '0')}",
-      });
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Đã gửi ticket"),
-      ),
+  Future<void> _showTicketDialog() async {
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (_) => const TicketDialog(),
     );
+
+    if (result != null) {
+      setState(() {
+        final now = DateTime.now();
+
+        TicketHistory.tickets.insert(0, {
+          "username": widget.username,
+          "reason": result["reason"]!,
+          "detail": result["detail"]!,
+          "date":
+              "${now.day.toString().padLeft(2, '0')}/"
+              "${now.month.toString().padLeft(2, '0')}/"
+              "${now.year}",
+          "time":
+              "${now.hour.toString().padLeft(2, '0')}:"
+              "${now.minute.toString().padLeft(2, '0')}",
+        });
+      });
+    }
   }
-}
 
   void _submitTicket() {
     final selected = _selectedReason ?? 'Chưa chọn';
     final detail = _detailController.text.trim();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Đã gửi ticket: $selected${detail.isNotEmpty ? '\n$detail' : ''}'),
+        content: Text(
+          'Đã gửi ticket: $selected${detail.isNotEmpty ? '\n$detail' : ''}',
+        ),
       ),
     );
     _detailController.clear();
@@ -74,9 +67,7 @@ Future<void> _showTicketDialog() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ticket'),
-      ),
+      appBar: AppBar(title: const Text('Ticket')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -97,10 +88,7 @@ Future<void> _showTicketDialog() async {
 
             const Text(
               "Lịch sử gửi ticket",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
 
             const SizedBox(height: 10),
@@ -129,7 +117,7 @@ Future<void> _showTicketDialog() async {
               ),
             ),
           ],
-        )
+        ),
       ),
     );
   }

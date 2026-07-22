@@ -10,10 +10,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false,
-
-    home: LoginPage()
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: LoginPage());
   }
 }
 
@@ -27,7 +24,6 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(title: const Text("Login")),
-
       body: Padding(
         padding: const EdgeInsets.all(50),
 
@@ -67,15 +63,25 @@ class LoginPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  if (usernameController.text == "admin" &&
-                      passwordController.text == "123456") {
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const HomePage()),
+                  final username = usernameController.text.trim();
+
+                  if ((username == "admin" &&
+                          passwordController.text == "123456") ||
+                      (username == "blueb3r1" &&
+                          passwordController.text == "quoclv") ||
+                      (username == "StephenCurr" &&
+                          passwordController.text == "tuananh")) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(username: username),
+                      ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Invalid username or password.")),
+                      const SnackBar(
+                        content: Text("Invalid username or password."),
+                      ),
                     );
                   }
                 },
