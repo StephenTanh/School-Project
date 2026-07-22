@@ -14,38 +14,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  Future<void> _showTicketDialog() async {
-    final result = await showDialog<Map<String, String>>(
-      context: context,
-      builder: (_) => const TicketDialog(),
-    );
-
-    if (!mounted) return;
-
-    if (result != null) {
-      setState(() {
-        final now = DateTime.now();
-
-        TicketHistory.tickets.insert(0, {
-          "username": widget.username,
-          "reason": result["reason"]!,
-          "detail": result["detail"]!,
-          "date":
-              "${now.day.toString().padLeft(2, '0')}/"
-              "${now.month.toString().padLeft(2, '0')}/"
-              "${now.year}",
-          "time":
-              "${now.hour.toString().padLeft(2, '0')}:"
-              "${now.minute.toString().padLeft(2, '0')}",
-        });
-      });
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Đã gửi ticket")));
-    }
-  }
-
   Widget _buildHomeTab() {
     return Center(
       child: Column(
@@ -65,21 +33,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildTicketTab() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _showTicketDialog,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Text('Gửi Ticket'),
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
+    return SingleChildScrollView(
+      child: TicketDialog(
+        onSubmit: (result) {
+          setState(() {
+            final now = DateTime.now();
+
+            TicketHistory.tickets.insert(0, {
+              "username": widget.username,
+              "reason": result["reason"]!,
+              "detail": result["detail"]!,
+              "date":
+                  "${now.day.toString().padLeft(2, '0')}/"
+                  "${now.month.toString().padLeft(2, '0')}/"
+                  "${now.year}",
+              "time":
+                  "${now.hour.toString().padLeft(2, '0')}:"
+                  "${now.minute.toString().padLeft(2, '0')}",
+            });
+          });
+        },
       ),
     );
   }
