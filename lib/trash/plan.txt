@@ -1,0 +1,11 @@
+firt login from user client requires Internet to grant offline login permission
+firt login from user root too
+
+user client = user database (!= rule_root)
+user client can only submit ticket and can't modify after submission
+tickets will be compiled into a single file, which has name_hs, reason, date(ss:mm:hh - dd/mm/yy), submisstor and desciption.
+at 00:00 app will auto submit that file to backend via method HTTP request. Backend handles one and send to database
+
+any file in DB, which have same date(dd/mm/yy not include mm:hh and submisstor) will be compiled into single file
+
+if login = user root. Having 1 tab Analyze for analyzing any data by day or week
