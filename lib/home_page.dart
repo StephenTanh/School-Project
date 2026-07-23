@@ -41,6 +41,8 @@ class _HomePageState extends State<HomePage> {
 
             TicketHistory.tickets.insert(0, {
               "username": widget.username,
+              "student": result["student"]!,
+              "class": result["class"]!,
               "reason": result["reason"]!,
               "detail": result["detail"]!,
               "date":
@@ -78,6 +80,7 @@ class _HomePageState extends State<HomePage> {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text("Học sinh: ${ticket["student"]} - Lớp ${ticket["class"]}"),
                 Text(ticket["detail"] ?? ""),
                 const SizedBox(height: 5),
                 Text("Người gửi: ${ticket["username"]}"),
