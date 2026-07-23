@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: schoolapp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: schoolapp
+      POSTGRES_USER: schoolapp_user
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - schoolapp_postgres_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U schoolapp_user -d schoolapp"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: schoolapp-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: change_pgadmin_password
+    ports:
+      - "127.0.0.1:5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        
+volumes:
+  schoolapp_postgres_data:
